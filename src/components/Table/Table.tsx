@@ -1,49 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  DataGrid,
-  ColDef,
-  ValueGetterParams,
-  columnsTotalWidthSelector,
-} from "@material-ui/data-grid/";
+import { DataGrid, ColDef } from "@material-ui/data-grid/";
 import { useStyles } from "./Table.style";
+import dataLocal from "../../assets/data/data.json";
 
 const columns: ColDef[] = [
+  { field: "index", headerName: "№", width: 70 },
   { field: "id", headerName: "ID", width: 70 },
   { field: "firstName", headerName: "First name", width: 130 },
   { field: "lastName", headerName: "Last name", width: 130 },
   {
     field: "email",
-    headerName: "email",
+    headerName: "Email",
     type: "string",
-    width: 90,
+    width: 220,
   },
   {
     field: "phone",
-    headerName: "phone",
+    headerName: "Phone",
     type: "string",
-    width: 100,
+    width: 250,
   },
 
   {
     field: "city",
-    headerName: "city",
+    headerName: "City",
     type: "string",
     width: 120,
   },
-  /*   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (params: ValueGetterParams) =>
-      `${params.getValue("firstName") || ""} ${
-        params.getValue("lastName") || ""
-      }`,
-  }, */
 ];
-
 interface Address {
   streetAddress: string;
   city: string;
@@ -70,8 +55,9 @@ export default function Table(): JSX.Element {
       const result = await axios(
         "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}"
       );
-      const res = result.data.map((item: DataProps) => {
+      const res = result.data.map((item: DataProps, i: number) => {
         return {
+          index: i + 1,
           id: item.id,
           firstName: item.firstName,
           lastName: item.lastName,
@@ -81,17 +67,21 @@ export default function Table(): JSX.Element {
         };
       });
       setData(res);
-      /*       console.log("data copy");
-      console.log(result);
-      console.log(result.data);
-      console.log(data); */
     };
-    fetchData();
+    fetchData().catch(() => {
+      setData(dataLocal);
+    });
   }, []);
 
   return (
     <div className={classes.content}>
-      <DataGrid rows={data} columns={columns} pageSize={25} checkboxSelection />
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={25}
+        rowsPerPageOptions={[10, 25, 50]}
+        checkboxSelection
+      />
     </div>
   );
 }
