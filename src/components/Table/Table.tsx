@@ -26,7 +26,7 @@ const columns: ColDef[] = [
     field: "city",
     headerName: "City",
     type: "string",
-    width: 120,
+    width: 200,
   },
 ];
 interface Address {
@@ -80,7 +80,7 @@ export default function Table(): JSX.Element {
         columns={columns}
         pageSize={25}
         rowsPerPageOptions={[10, 25, 50]}
-        checkboxSelection
+        //checkboxSelection
       />
     </div>
   );
