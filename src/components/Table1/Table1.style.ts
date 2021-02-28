@@ -14,9 +14,11 @@ export const useStyles = makeStyles(() => ({
   },
   th: {
     padding: 3,
+    whiteSpace: "nowrap",
   },
   tr: {},
   td: {
     padding: "2px 10px",
+    /* minWidth: 110, */
   },
 }));

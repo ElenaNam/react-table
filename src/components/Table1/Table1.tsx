@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-//import dataLocal from "../../assets/data/data.json";
-
+import React from "react";
+import Arrow from "../Arrow";
 import { useStyles } from "./Table1.style";
 
 interface Address {
@@ -23,39 +22,42 @@ interface DataProps {
 export default function Table(props: {
   dataTable: DataProps[];
   sortData: (column: string) => void;
+  direction: boolean;
 }): JSX.Element {
   const classes = useStyles();
-  const { dataTable, sortData } = props;
+  const { dataTable, sortData, direction } = props;
+
+  let value: number;
+  direction ? (value = 180) : (value = 0);
 
   return (
     <table className={classes.content}>
       <caption className={classes.caption}>the table</caption>
       <tr>
-        <th className={classes.th} onClick={() => sortData("№")}>
-          №
+        <th className={classes.th} /*  onClick={() => sortData("index")} */>
+          № {/* <Arrow rotate={value}  /> */}
         </th>
         <th className={classes.th} onClick={() => sortData("id")}>
-          id
+          id <Arrow rotate={value} />
         </th>
         <th className={classes.th} onClick={() => sortData("firstName")}>
-          firstName
+          firstName <Arrow rotate={value} />
         </th>
         <th className={classes.th} onClick={() => sortData("lastName")}>
-          lastName
+          lastName <Arrow rotate={value} />
         </th>
         <th className={classes.th} onClick={() => sortData("email")}>
-          email
+          email <Arrow rotate={value} />
         </th>
         <th className={classes.th} onClick={() => sortData("phone")}>
-          phone
+          phone <Arrow rotate={value} />
         </th>
-        <th className={classes.th} onClick={() => sortData("city")}>
-          city
+        <th className={classes.th} onClick={() => sortData("address")}>
+          city <Arrow rotate={value} />
         </th>
-        <th className={classes.th} onClick={() => sortData("streetAddress")}>
-          streetAddress
-        </th>
-        <th className={classes.th} onClick={() => sortData("description")}>
+        <th
+          className={classes.th} /*  onClick={() => sortData("description")} */
+        >
           description
         </th>
       </tr>
@@ -79,7 +81,6 @@ export default function Table(props: {
               {item.phone}
             </td>
             <td className={classes.td}>{item.address.city}</td>
-            <td className={classes.td}>{item.address.streetAddress}</td>
             <td className={classes.td}>{item.description}</td>
           </tr>
         );

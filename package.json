@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "scripts": {
     "start": "webpack serve --config webpack.dev.config.ts",
-    "build": "webpack --config webpack.prod.config.ts",   
+    "build": "webpack --config webpack.prod.config.ts",
     "fix": "eslint --fix"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/data-grid": "^4.0.0-alpha.20",
+    "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
     "material-ui": "^0.20.2",
     "react": "^17.0.1",
