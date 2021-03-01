@@ -1,14 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 import App from "./components/App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <CssBaseline>
-      <App />
-    </CssBaseline>
+    <BrowserRouter>
+      <CssBaseline>
+        <App />
+      </CssBaseline>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

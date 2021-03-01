@@ -96,6 +96,7 @@ export default function TableApp(): JSX.Element {
 
   return (
     <>
+      <p>the table was created using the Material-UI(Table, TablePagination)</p>
       <Search handleChange={handleChange} inputField={inputField} />
       <Table2 dataTable={data} sortData={sortData} direction={direction} />
     </>

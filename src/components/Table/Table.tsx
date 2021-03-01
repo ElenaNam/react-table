@@ -75,6 +75,7 @@ export default function Table(): JSX.Element {
 
   return (
     <div className={classes.content}>
+      <p>the table was created using the Material-UI(DataGrid)</p>
       <DataGrid
         rows={data}
         columns={columns}
