@@ -159,7 +159,6 @@ export default function Table2(props: {
                           style={{ padding: 10 }}
                         >
                           {value}
-                          {console.log(value)}
                         </TableCell>
                       );
                     })}
@@ -178,6 +177,8 @@ export default function Table2(props: {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
+      {/*       {console.log(page)}
+      {console.log(rows.length)} */}
     </Paper>
   );
 }
