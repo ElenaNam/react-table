@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import dataLocal from "../../assets/data/data.json";
-import Table1 from "./Table1";
+
+//import { useStyles } from "./Table1.style";
+import Table2 from "./Table2";
+
 interface Address {
   streetAddress: string;
   city: string;
@@ -26,25 +29,23 @@ export default function TableApp(): JSX.Element {
   const [data, setData] = useState(dataLocal);
   const [direction, setDirection] = useState(true);
   //const [fieldName, setFieldName] = useState("");
+  //const [countPage, setCountPage] = useState(0);
 
   const sortData = (column: string) => {
     const dataLocalCopy: DataProps[] = dataLocal.slice();
     let dataSort: DataProps[] = [];
 
-    if (direction) {
+    if (/* fieldName !== column &&  */ direction) {
       dataSort = dataLocalCopy.sort((a, b) => (a[column] > b[column] ? 1 : -1));
     } else if (/* fieldName === column &&  */ !direction) {
       dataSort = dataLocalCopy
         .sort((a, b) => (a[column] > b[column] ? 1 : -1))
         .reverse();
     }
+
     setData(dataSort);
     setDirection(!direction);
   };
 
-  return (
-    <>
-      <Table1 dataTable={data} sortData={sortData} direction={direction} />
-    </>
-  );
+  return <Table2 dataTable={data} sortData={sortData} direction={direction} />;
 }

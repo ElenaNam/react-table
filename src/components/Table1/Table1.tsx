@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Arrow from "../Arrow";
+//import Paginator from "../Paginator";
 import { useStyles } from "./Table1.style";
 
 interface Address {
@@ -26,6 +27,16 @@ export default function Table(props: {
 }): JSX.Element {
   const classes = useStyles();
   const { dataTable, sortData, direction } = props;
+  const [field, setField] = useState("");
+
+  const fieldSortData = (column: string) => {
+    setField(column);
+    sortData(column);
+  };
+  useEffect(() => {
+    //fieldSortData(field);
+    //console.log(field);
+  });
 
   let value: number;
   direction ? (value = 180) : (value = 0);
@@ -34,26 +45,24 @@ export default function Table(props: {
     <table className={classes.content}>
       <caption className={classes.caption}>the table</caption>
       <tr>
-        <th className={classes.th} /*  onClick={() => sortData("index")} */>
-          № {/* <Arrow rotate={value}  /> */}
+        <th className={classes.th}>№</th>
+        <th className={classes.th} onClick={() => fieldSortData("id")}>
+          id {field === "id" ? <Arrow rotate={value} /> : null}
         </th>
-        <th className={classes.th} onClick={() => sortData("id")}>
-          id <Arrow rotate={value} />
+        <th className={classes.th} onClick={() => fieldSortData("firstName")}>
+          firstName {field === "firstName" ? <Arrow rotate={value} /> : null}
         </th>
-        <th className={classes.th} onClick={() => sortData("firstName")}>
-          firstName <Arrow rotate={value} />
+        <th className={classes.th} onClick={() => fieldSortData("lastName")}>
+          lastName {field === "lastName" ? <Arrow rotate={value} /> : null}
         </th>
-        <th className={classes.th} onClick={() => sortData("lastName")}>
-          lastName <Arrow rotate={value} />
+        <th className={classes.th} onClick={() => fieldSortData("email")}>
+          email {field === "email" ? <Arrow rotate={value} /> : null}
         </th>
-        <th className={classes.th} onClick={() => sortData("email")}>
-          email <Arrow rotate={value} />
+        <th className={classes.th} onClick={() => fieldSortData("phone")}>
+          phone {field === "phone" ? <Arrow rotate={value} /> : null}
         </th>
-        <th className={classes.th} onClick={() => sortData("phone")}>
-          phone <Arrow rotate={value} />
-        </th>
-        <th className={classes.th} onClick={() => sortData("address")}>
-          city <Arrow rotate={value} />
+        <th className={classes.th} onClick={() => fieldSortData("city")}>
+          city {field === "city" ? <Arrow rotate={value} /> : null}
         </th>
         <th
           className={classes.th} /*  onClick={() => sortData("description")} */

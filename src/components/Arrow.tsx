@@ -1,5 +1,4 @@
 import React from "react";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import { makeStyles } from "@material-ui/core/styles";
 
