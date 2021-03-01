@@ -1,8 +1,33 @@
-import React, { useEffect, useState } from "react";
-import Arrow from "../Arrow";
-//import Paginator from "../Paginator";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { DataGrid, ColDef } from "@material-ui/data-grid/";
 import { useStyles } from "./Table1.style";
+import dataLocal from "../../assets/data/data.json";
 
+const columns: ColDef[] = [
+  { field: "index", headerName: "№", width: 70 },
+  { field: "id", headerName: "ID", width: 70 },
+  { field: "firstName", headerName: "First name", width: 130 },
+  { field: "lastName", headerName: "Last name", width: 130 },
+  {
+    field: "email",
+    headerName: "Email",
+    type: "string",
+    width: 220,
+  },
+  {
+    field: "phone",
+    headerName: "Phone",
+    type: "string",
+    width: 250,
+  },
+  {
+    field: "city",
+    headerName: "City",
+    type: "string",
+    width: 200,
+  },
+];
 interface Address {
   streetAddress: string;
   city: string;
@@ -20,80 +45,44 @@ interface DataProps {
   description: string;
 }
 
-export default function Table(props: {
-  dataTable: DataProps[];
-  sortData: (column: string) => void;
-  direction: boolean;
-}): JSX.Element {
+export default function Table1(): JSX.Element {
   const classes = useStyles();
-  const { dataTable, sortData, direction } = props;
-  const [field, setField] = useState("");
+  const [data, setData] = useState<DataProps[]>([]);
 
-  const fieldSortData = (column: string) => {
-    setField(column);
-    sortData(column);
-  };
   useEffect(() => {
-    //fieldSortData(field);
-    //console.log(field);
-  });
-
-  let value: number;
-  direction ? (value = 180) : (value = 0);
+    const fetchData = async () => {
+      const result = await axios(
+        "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}"
+      );
+      const res = result.data.map((item: DataProps, i: number) => {
+        return {
+          index: i + 1,
+          id: item.id,
+          firstName: item.firstName,
+          lastName: item.lastName,
+          email: item.email,
+          phone: item.phone,
+          city: item.address.city,
+        };
+      });
+      setData(res);
+    };
+    fetchData().catch(() => {
+      setData(dataLocal);
+    });
+  }, []);
 
   return (
-    <table className={classes.content}>
-      <caption className={classes.caption}>the table</caption>
-      <tr>
-        <th className={classes.th}>№</th>
-        <th className={classes.th} onClick={() => fieldSortData("id")}>
-          id {field === "id" ? <Arrow rotate={value} /> : null}
-        </th>
-        <th className={classes.th} onClick={() => fieldSortData("firstName")}>
-          firstName {field === "firstName" ? <Arrow rotate={value} /> : null}
-        </th>
-        <th className={classes.th} onClick={() => fieldSortData("lastName")}>
-          lastName {field === "lastName" ? <Arrow rotate={value} /> : null}
-        </th>
-        <th className={classes.th} onClick={() => fieldSortData("email")}>
-          email {field === "email" ? <Arrow rotate={value} /> : null}
-        </th>
-        <th className={classes.th} onClick={() => fieldSortData("phone")}>
-          phone {field === "phone" ? <Arrow rotate={value} /> : null}
-        </th>
-        <th className={classes.th} onClick={() => fieldSortData("city")}>
-          city {field === "city" ? <Arrow rotate={value} /> : null}
-        </th>
-        <th
-          className={classes.th} /*  onClick={() => sortData("description")} */
-        >
-          description
-        </th>
-      </tr>
-      {dataTable.map((item: DataProps, i: number) => {
-        return (
-          <tr
-            key={item.id}
-            className={classes.tr}
-            style={
-              i % 2 !== 0
-                ? { backgroundColor: "#F1ECFF" }
-                : { backgroundColor: "#B1ACBF" }
-            }
-          >
-            <td className={classes.td}>{i + 1}</td>
-            <td className={classes.td}>{item.id}</td>
-            <td className={classes.td}>{item.firstName}</td>
-            <td className={classes.td}>{item.lastName}</td>
-            <td className={classes.td}>{item.email}</td>
-            <td className={classes.td} style={{ whiteSpace: "nowrap" }}>
-              {item.phone}
-            </td>
-            <td className={classes.td}>{item.address.city}</td>
-            <td className={classes.td}>{item.description}</td>
-          </tr>
-        );
-      })}
-    </table>
+    <div className={classes.content}>
+      <p>the table was created using the Material-UI(DataGrid)</p>
+      <p>getting data via the api</p>
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSize={25}
+        rowsPerPageOptions={[10, 25, 50]}
+        //checkboxSelection
+      />
+    </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useStyles } from "./Search.style";
 
 export default function Search(props: {
