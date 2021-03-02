@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 import Nav from "./Nav";
@@ -25,6 +25,7 @@ export default function App(): JSX.Element {
       <Switch>
         <Route exact path="/table1" component={Table1} />
         <Route path="/table2" component={Table2} />
+        <Redirect from="/" to="/table1" />
       </Switch>
     </div>
   );

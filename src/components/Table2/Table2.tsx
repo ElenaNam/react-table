@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import dataLocal from "../../assets/data/data.json";
 import Search from "../Search/Search";
 import TableConstructor from "./TableConstructor";
-
-//import { useStyles } from "./Table1.style";
 
 interface Address {
   streetAddress: string;
@@ -18,17 +16,17 @@ interface DataProps {
   lastName: string;
   email: string;
   phone: string;
-  address: Address;
+  address: { streetAddress: string; city: string; state: string; zip: string };
   description: string;
 }
 
 export default function Table2(): JSX.Element {
-  //const classes = useStyles();
   const [data, setData] = useState(dataLocal);
   const [direction, setDirection] = useState(true);
-
   const [inputField, setInputField] = useState("");
   const [searchText, setSearchText] = useState("");
+
+  /* SORTING */
 
   const sortData = (column: string) => {
     const dataLocalCopy: DataProps[] = dataLocal.slice();
@@ -41,7 +39,6 @@ export default function Table2(): JSX.Element {
         .sort((a, b) => (a[column] > b[column] ? 1 : -1))
         .reverse();
     }
-
     setData(dataSort);
     setDirection(!direction);
   };
@@ -50,48 +47,42 @@ export default function Table2(): JSX.Element {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputField(e.target.value); //отобразить введенный текст
-    //getFilterData(e.target.value);
-    //setSearchText(inputField); //изменить текст для поиска строки
-    //console.log(searchText);
-    //getFilterData(searchText); //искать строку по введенному тексту
     setSearchText(inputField);
-    setData(() => getFilterData(searchText));
+    getFilterData(searchText);
   };
 
-  let columnName: string;
-  for (const key in data[0]) {
-    columnName = key;
-  }
-  const getFilterData = (text: string) => {
-    if (!text) {
-      return data;
-    }
-    const dataSearch = data.filter((el: DataProps) => {
-      console.log(el[`${columnName}`]);
-      return el[`${columnName}`]
-        .toString()
-        .toLowerCase()
-        .includes(text.toLowerCase());
-    });
-    return dataSearch;
-  };
+  //let columnName: string;
+  //for (const key in data[0]) {
+  //columnName = key; // id firstName lastName email phone address description
+  //}
 
-  /*   const filterData = getFilterData();
-  const limitCountPage = 50;
-  const lastBlockRow = currentPageNumber * limitCountPage;
-  const firstBlockRow = lastBlockRow - limitCountPage +1;
-  const currentBlockRows = filterData.slice(firstBlockRow, lastBlockRow) */
-
-  //const filterData = getFilterData(searchText);
+  const getFilterData = useCallback(
+    (text: string) => {
+      if (!text) {
+        console.log("data");
+        console.log(data);
+        return data;
+      }
+      const dataSearch = data.filter((el: DataProps) => {
+        //return el[`${columnName}`]
+        return (
+          el["id"].toString().toLowerCase().includes(text.toLowerCase()) ||
+          el["firstName"].toLowerCase().includes(text.toLowerCase()) ||
+          el["lastName"].toLowerCase().includes(text.toLowerCase()) ||
+          el["email"].toLowerCase().includes(text.toLowerCase()) ||
+          el["phone"].toLowerCase().includes(text.toLowerCase()) ||
+          el["description"].toLowerCase().includes(text.toLowerCase())
+        );
+      });
+      setData(dataSearch);
+      return dataSearch;
+    },
+    [data]
+  );
 
   useEffect(() => {
-    // getFilterData(inputField);
     setSearchText(inputField); //изменить текст для поиска строки
-    //setData(()=>getFilterData);
-    console.log(searchText);
-    //setData(() => getFilterData(searchText));
-    //getFilterData(searchText); //искать строку по введенному тексту
-  }, [inputField, searchText]);
+  }, [getFilterData, inputField, searchText]);
 
   return (
     <>

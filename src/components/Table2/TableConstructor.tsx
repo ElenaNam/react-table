@@ -18,7 +18,6 @@ interface Column {
     | "lastName"
     | "email"
     | "phone"
-    | "address"
     | "description";
   label: string;
   minWidth?: number;
@@ -26,7 +25,7 @@ interface Column {
 
 const columns: Column[] = [
   { id: "index", label: "№", minWidth: 70 },
-  { id: "id", label: "ID", minWidth: 70 },
+  { id: "id", label: "id", minWidth: 70 },
   {
     id: "firstName",
     label: "firstName",
@@ -48,11 +47,6 @@ const columns: Column[] = [
     minWidth: 250,
   },
   {
-    id: "address",
-    label: "city",
-    minWidth: 170,
-  },
-  {
     id: "description",
     label: "description",
     minWidth: 170,
@@ -64,9 +58,6 @@ interface DataProps {
   lastName: string;
   email: string;
   phone: string;
-  address: {
-    city: string;
-  };
   description: string;
 }
 
@@ -82,7 +73,7 @@ export default function TableConstructor(props: {
   const [field, setField] = useState("");
 
   const fieldSortData = (label: string) => {
-    if (label !== "№" && label !== "description") {
+    if (label !== "№") {
       setField(label);
       sortData(label);
     }
@@ -111,7 +102,6 @@ export default function TableConstructor(props: {
       lastName: item.lastName,
       email: item.email,
       phone: item.phone,
-      address: item.address.city,
       description: item.description,
     };
   });
@@ -132,8 +122,7 @@ export default function TableConstructor(props: {
                   onClick={() => fieldSortData(column.label)}
                 >
                   {column.label}
-                  {field === column.label &&
-                  (column.label !== "№" || "description") ? (
+                  {field === column.label && column.label !== "№" ? (
                     <Arrow rotate={value} />
                   ) : null}
                 </TableCell>
@@ -169,8 +158,6 @@ export default function TableConstructor(props: {
         onChangePage={handleChangePage}
         onChangeRowsPerPage={handleChangeRowsPerPage}
       />
-      {/*       {console.log(page)}
-      {console.log(rows.length)} */}
     </Paper>
   );
 }
