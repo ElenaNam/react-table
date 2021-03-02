@@ -2,73 +2,69 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { DataGrid, ColDef } from "@material-ui/data-grid/";
 import { useStyles } from "./Table1.style";
-import dataLocal from "../../assets/data/data.json";
+import commentsLocal from "../../assets/data/comments.json";
 
 const columns: ColDef[] = [
-  { field: "index", headerName: "№", width: 70 },
-  { field: "id", headerName: "ID", width: 70 },
-  { field: "firstName", headerName: "First name", width: 130 },
-  { field: "lastName", headerName: "Last name", width: 130 },
+  { field: "id", headerName: "№", width: 70, type: "number" },
+  { field: "postId", headerName: "PostId", width: 100, type: "number" },
+  { field: "name", headerName: "Name", width: 400, type: "string" },
+  { field: "email", headerName: "Email", width: 200, type: "string" },
   {
-    field: "email",
-    headerName: "Email",
+    field: "body",
+    headerName: "Body",
+    flex: 1,
     type: "string",
-    width: 220,
-  },
-  {
-    field: "phone",
-    headerName: "Phone",
-    type: "string",
-    width: 250,
-  },
-  {
-    field: "city",
-    headerName: "City",
-    type: "string",
-    width: 200,
   },
 ];
-interface Address {
-  streetAddress: string;
-  city: string;
-  state: string;
-  zip: string;
-}
-interface DataProps {
+
+interface CommentsProps {
+  postId: number;
   id: number;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  phone: string;
-  address: Address;
-  city?: Address["city"];
-  description: string;
+  body: string;
 }
 
 export default function Table1(): JSX.Element {
   const classes = useStyles();
-  const [data, setData] = useState<DataProps[]>([]);
+  const [data, setData] = useState<CommentsProps[]>(commentsLocal);
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios(
-        "http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}"
+        "https://jsonplaceholder.typicode.com/comments"
       );
-      const res = result.data.map((item: DataProps, i: number) => {
-        return {
-          index: i + 1,
-          id: item.id,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          email: item.email,
-          phone: item.phone,
-          city: item.address.city,
-        };
-      });
+      const res = result.data.map(
+        (item: {
+          postId: number;
+          id: number;
+          name: string;
+          email: string;
+          body: string;
+        }) => {
+          return {
+            id: item.id,
+            postId: item.postId,
+            name: item.name,
+            email: item.email,
+            body: item.body,
+          };
+        }
+      );
       setData(res);
     };
     fetchData().catch(() => {
-      setData(dataLocal);
+      const res1 = commentsLocal.map((item) => {
+        return {
+          id: item.id,
+          postId: item.postId,
+          name: item.name,
+          email: item.email,
+          body: item.body,
+        };
+      });
+      console.log(res1);
+      setData(res1);
     });
   }, []);
 
@@ -81,6 +77,7 @@ export default function Table1(): JSX.Element {
         columns={columns}
         pageSize={25}
         rowsPerPageOptions={[10, 25, 50]}
+        rowHeight={70}
         //checkboxSelection
       />
     </div>
